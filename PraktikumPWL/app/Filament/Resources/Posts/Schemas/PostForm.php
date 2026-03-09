@@ -32,15 +32,26 @@ class PostForm
                     ->schema([
                 Group::make([
                 TextInput::make('title')
-                    ->required()
-                    ->minLength(5),
+                    ->rules('required|min:5|max:10'),
+                    // ->required(),
+                    // ->minLength(5)
+                    // ->maxLength(255)
+                    // ->rules(["required", "min:3", "max:10"]),
                 TextInput::make('slug')
                     ->required()
-                    ->unique(ignoreRecord: true),
+                    ->minLength(3)
+                    ->unique()
+                    ->validationMessages([
+                        'unique' => 'Slug must be unique.',
+                    ]),
                 Select::make('category_id')
                     ->relationship('category', 'name')
+                    ->required()
                     ->preload()
-                    ->searchable(),
+                    ->searchable()
+                    ->validationMessages([
+                        'required' => 'Category harus dipilih.',
+                    ]),
                 ColorPicker::make('color'),
                 ])->columns(2),
                 MarkdownEditor::make('content'),
@@ -54,8 +65,12 @@ class PostForm
                     ->schema([
                 // RichEditor::make('content'),
                 FileUpload::make('image')
+                    ->required()
                     ->disk('public')
-                    ->directory('posts'),
+                    ->directory('posts')
+                    ->validationMessages([
+                        'required' => 'Image wajib diupload.',
+                    ]),
                 ]),
 
                 Section::make('Meta Information')
@@ -64,8 +79,6 @@ class PostForm
                 TagsInput::make('tags'),
                 Checkbox::make('published'),
                 DatePicker::make('published_at'),
-                IconColumn::make('published')
-                    ->boolean(),
                 ]),
             ])
         ])->columnSpan(1)
