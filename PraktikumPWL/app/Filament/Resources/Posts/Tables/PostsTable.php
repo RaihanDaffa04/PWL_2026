@@ -9,6 +9,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\IconColumn;
 
 class PostsTable
 {
@@ -28,6 +29,8 @@ class PostsTable
                 ImageColumn::make('image')
                     ->disk('public')
                     ->sortable(),
+                IconColumn::make('published')
+                    ->boolean(),
                 TextColumn::make('created_at')
                     ->label('Created At')
                     ->dateTime()
