@@ -16,6 +16,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Schemas\Components\Section;
 use Filament\Support\Assets\HeroIcon;
 use Filament\Schemas\Components\Group;
+use App\Models\Category;
 
 
 class PostForm
@@ -46,8 +47,9 @@ class PostForm
                     ]),
                 Select::make('category_id')
                     ->relationship('category', 'name')
+                    ->options(Category::all()->pluck('name', 'id'))
                     ->required()
-                    ->preload()
+                    // ->preload()
                     ->searchable()
                     ->validationMessages([
                         'required' => 'Category harus dipilih.',
@@ -76,7 +78,10 @@ class PostForm
                 Section::make('Meta Information')
                     ->icon('heroicon-o-tag')
                     ->schema([
-                TagsInput::make('tags'),
+                Select::make('tags')
+                    ->relationship('tags', 'name')
+                    ->multiple()
+                    ->preload(),
                 Checkbox::make('published'),
                 DatePicker::make('published_at'),
                 ]),
